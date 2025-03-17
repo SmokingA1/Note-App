@@ -25,7 +25,7 @@ async def get_notes(
 
 async def create_note(db: AsyncSession, note_create: NoteCreate) -> Note:
     new_note = Note(text=note_create.text,
-                    tag=note_create,
+                    tag=note_create.tag
                     )
     
     db.add(new_note)
@@ -35,11 +35,12 @@ async def create_note(db: AsyncSession, note_create: NoteCreate) -> Note:
 
 async def update_note(db: AsyncSession, note_id: int, note_update: NoteUpdate) -> Note:
     db_note = await get_note_by_id(db, note_id)
+
     if not db_note:
         return None
     
-    
     update_data = note_update.dict(exclude_unset=True)
+    
     for key, value in update_data.items():
         setattr(db_note, key, value)
     
@@ -49,6 +50,7 @@ async def update_note(db: AsyncSession, note_id: int, note_update: NoteUpdate) -
 
 async def delete_note(db: AsyncSession, note_id: int) -> Note:
     db_note = await get_note_by_id(db, note_id)
+
     if not db_note:
         return None
     

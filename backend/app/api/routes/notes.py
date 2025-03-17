@@ -76,4 +76,6 @@ async def delete_existing_note(db: SessionDep, note_id: int) -> Any:
     if not db_note:
         raise HTTPException(status_code=404, detail='Note not found!')
     
-    return db_note
+    deleted_note = await delete_note(db, note_id)
+
+    return deleted_note
